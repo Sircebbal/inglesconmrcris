@@ -16,25 +16,23 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
 
   const firstName = document.getElementById('firstName').value.trim();
   const email     = document.getElementById('email').value.trim();
-  const level     = document.getElementById('level').value;
 
-  // Basic validation — highlight empty required fields
-  if (!firstName || !email || !level) {
-    const empties = [];
-    if (!firstName) empties.push('firstName');
-    if (!email)     empties.push('email');
-    if (!level)     empties.push('level');
-
-    empties.forEach(id => {
-      const el = document.getElementById(id);
+  if (!firstName || !email) {
+    if (!firstName) {
+      const el = document.getElementById('firstName');
       el.style.borderColor = '#e05c5c';
       el.addEventListener('input', () => el.style.borderColor = '', { once: true });
-    });
+    }
+    if (!email) {
+      const el = document.getElementById('email');
+      el.style.borderColor = '#e05c5c';
+      el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+    }
     return;
   }
 
   const btn = this.querySelector('.submit-btn');
-  btn.textContent = 'Sending…';
+  btn.textContent = 'Enviando…';
   btn.disabled = true;
 
   // 👉 Replace 'xyzabcde' with your actual Formspree form ID
@@ -44,10 +42,9 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
     body: JSON.stringify({
       firstName,
       email,
-      level,
       lastName: document.getElementById('lastName').value,
       whatsapp: document.getElementById('whatsapp').value,
-      goal: document.getElementById('goal').value,
+      goal:     document.getElementById('goal').value,
     })
   })
   .then(res => {
@@ -56,12 +53,12 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
       document.getElementById('successToast').classList.add('show');
       this.reset();
     } else {
-      btn.textContent = 'Something went wrong — try again';
+      btn.textContent = 'Algo salió mal — intenta de nuevo';
       btn.disabled = false;
     }
   })
   .catch(() => {
-    btn.textContent = 'Something went wrong — try again';
+    btn.textContent = 'Algo salió mal — intenta de nuevo';
     btn.disabled = false;
   });
 });
