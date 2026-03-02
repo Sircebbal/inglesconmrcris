@@ -33,16 +33,35 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
     return;
   }
 
-  // Simulate sending
-  // 👉 Swap the setTimeout below for a real fetch() to Formspree, EmailJS, or your own backend
   const btn = this.querySelector('.submit-btn');
   btn.textContent = 'Sending…';
   btn.disabled = true;
 
-  setTimeout(() => {
-    btn.style.display = 'none';
-    const toast = document.getElementById('successToast');
-    toast.classList.add('show');
-    this.reset();
-  }, 1200);
+  // 👉 Replace 'xyzabcde' with your actual Formspree form ID
+  fetch('https://formspree.io/f/xdalrgzp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName,
+      email,
+      level,
+      lastName: document.getElementById('lastName').value,
+      whatsapp: document.getElementById('whatsapp').value,
+      goal: document.getElementById('goal').value,
+    })
+  })
+  .then(res => {
+    if (res.ok) {
+      btn.style.display = 'none';
+      document.getElementById('successToast').classList.add('show');
+      this.reset();
+    } else {
+      btn.textContent = 'Something went wrong — try again';
+      btn.disabled = false;
+    }
+  })
+  .catch(() => {
+    btn.textContent = 'Something went wrong — try again';
+    btn.disabled = false;
+  });
 });
